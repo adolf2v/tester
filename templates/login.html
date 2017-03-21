@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <style type="text/css">
+        label.mobile {
+            margin-right: auto;
+            width: 30px;
+        }
+
+        label.password {
+            margin-right: auto;
+            width: 30px;
+            white-space: pre;
+        }
+
+        input.mobile {
+            margin-left: 20px;
+        }
+
+        input.password {
+            margin-left: 20px;
+        }
+
+        input.login {
+            background-color: #055db5;
+            display: block;
+            text-align: center;
+            float: left;
+            font: normal 24px arial, sans-serif;
+            height: auto;
+            width: auto;
+            margin-top: 20px;
+            margin-left: 20px;
+            margin-right: 20px;
+            text-decoration: none;
+        }
+
+    </style>
+</head>
+<body>
+<form name="info" action="/login" method="post">
+    <label class="mobile">手机号码</label>
+    <input class="mobile" name="mobile" type="text" align="right"><br/>
+    <label class="password">密 码</label>
+    <input class="password" name="password" type="password" align="right"><br/>
+    <input type="hidden" name="action" value="login">
+    {% raw xsrf_form_html() %}
+    <input class="login" type="submit" value="登录"><br/>
+</form>
+<a href="/signup">没有账户?点我注册</a>
+</body>
+</html>

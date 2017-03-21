@@ -1,0 +1,54 @@
+
+user:
+CREATE TABLE `user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(30) NOT NULL,
+  `mobile` varchar(11) NOT NULL,
+  `password` varchar(100) NOT NULL,
+  `sex` int(11) DEFAULT NULL,
+  `salt` varchar(6) NOT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `ip` varchar(16) DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `mobile` (`mobile`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8
+
+book:
+ CREATE TABLE `book` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `book_desc` text,
+  `book_name` varchar(100) NOT NULL,
+  `source` varchar(50) NOT NULL,
+  `author` varchar(50) NOT NULL,
+  `upload_user` int(10) DEFAULT NULL,
+  `created_by` datetime DEFAULT NULL,
+  `update_by` datetime DEFAULT NULL,
+  `price` decimal(5,2) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `book_name` (`book_name`)
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8
+
+book_content:
+CREATE TABLE `book_content` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `book_id` int(11) DEFAULT NULL,
+  `chapter_id` int(11) DEFAULT NULL,
+  `chapter_name` varchar(100) DEFAULT NULL,
+  `content` mediumtext,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8
+
+login_status:
+CREATE TABLE `login_status` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `mobile` varchar(11) NOT NULL,
+  `status` tinyint(1) DEFAULT NULL,
+  `login_time` datetime DEFAULT NULL,
+  `ip` varchar(16) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `mobile` (`mobile`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8
+
