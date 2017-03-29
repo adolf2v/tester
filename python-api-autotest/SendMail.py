@@ -4,9 +4,6 @@
 from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
 from email.mime.text import MIMEText
-
-# python 2.3.*: email.Utils email.Encoders
-from email.mime.text import MIMEText
 from email.utils import COMMASPACE, formatdate
 from email import encoders
 import os
@@ -31,17 +28,22 @@ def send_mail(server, fro, to, subject, content, files=[]):
     # 判断收件人是不是一个列表
     assert type(to) == list
 
-    msg2 = MIMEText(content, _charset='UTF-8')
+    # 实例化一个多媒体的类
     msg = MIMEMultipart()
+    # 设置编码
     msg.set_charset('UTF-8')
+    # 设置发件人
     msg['From'] = fro
+    # 设置主题
     msg['Subject'] = subject
+    # 设置收件人
     msg['To'] = COMMASPACE.join(to)
+    # 设置时间
     msg['Date'] = formatdate(localtime=True)
     # MIMEText('中文', _charset='UTF-8')
+    # 添加正文的 内容
     msgtext = MIMEText("""%s""" % content, 'html', 'UTF-8')
     msg.attach(msgtext)
-    msg.attach(msg2)
 
     for file in files:
         part = MIMEBase('application', 'multipart/mixed')  # 'octet-stream': binary data
@@ -58,7 +60,7 @@ def send_mail(server, fro, to, subject, content, files=[]):
 
 
 if __name__ == "__main__":
-    server = {'name': 'smtp.163.com', 'user': 'liuweiqiang3v@163.com', 'passwd': 'xxxxxxx'}
+    server = {'name': 'smtp.163.com', 'user': 'liuweiqiang3v@163.com', 'passwd': 'xxxxxx'}
     with open("result.html", "rb") as fb:
         content = fb.read()
         send_mail(server, 'liuweiqiang3v@163.com', ['liuwq@tupo.com'], u'测试报告,详情请见附件', content, files=["result.html"])
