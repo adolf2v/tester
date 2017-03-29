@@ -3,7 +3,7 @@
 import unittest
 import requests
 
-
+"""发送多媒体文件:http://docs.python-requests.org/en/latest/user/advanced/#post-multiple-multipart-encoded-files"""
 class testCourse(unittest.TestCase):
     # 测试前的准备工作
     def setUp(self):
@@ -13,6 +13,7 @@ class testCourse(unittest.TestCase):
     def test_a_Add(self):
         # 进行操作,并对返回的结果进行验证
         pass
+
 
     # 上传多媒体图片
     def uploadPic(self):
