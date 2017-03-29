@@ -41,10 +41,11 @@ def send_mail(server, fro, to, subject, content, files=[]):
     # 设置时间
     msg['Date'] = formatdate(localtime=True)
     # MIMEText('中文', _charset='UTF-8')
-    # 添加正文的 内容
+    # 正文的内容
     msgtext = MIMEText("""%s""" % content, 'html', 'UTF-8')
+    # 添加正文内容
     msg.attach(msgtext)
-
+    # 遍历附件,并进行添加
     for file in files:
         part = MIMEBase('application', 'multipart/mixed')  # 'octet-stream': binary data
         part.set_payload(content)
@@ -60,7 +61,7 @@ def send_mail(server, fro, to, subject, content, files=[]):
 
 
 if __name__ == "__main__":
-    server = {'name': 'smtp.163.com', 'user': 'liuweiqiang3v@163.com', 'passwd': 'xxxxxx'}
+    server = {'name': 'smtp.163.com', 'user': 'liuweiqiang3v@163.com', 'passwd': '521426'}
     with open("result.html", "rb") as fb:
         content = fb.read()
         send_mail(server, 'liuweiqiang3v@163.com', ['liuwq@tupo.com'], u'测试报告,详情请见附件', content, files=["result.html"])
