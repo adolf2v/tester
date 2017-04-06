@@ -9,9 +9,10 @@ import sys
 import tornado
 from models.book import Book
 from Utils.wrapper import login
+from libs.helper import handlerHelper
 
 
-class BookHandler(tornado.web.RequestHandler):
+class BookHandler(tornado.web.RequestHandler, handlerHelper):
     # 获取书籍
     @login
     def get(self):
@@ -32,7 +33,7 @@ class BookHandler(tornado.web.RequestHandler):
         if func:
             func()
         else:
-            self.write(u"参数错误")
+            self.reply_json_error(1, u"参数错误")
 
     # 添加书籍
     @login
@@ -44,19 +45,19 @@ class BookHandler(tornado.web.RequestHandler):
         upload = int(self.get_secure_cookie('sign'))
         breif = self.get_argument('breif', None)
         if not name or not source or not author:
-            self.write(u'请填写书名,来源或者作者')
+            self.reply_json_error(1, u'请填写书名,来源或者作者')
             return
         b = Book.select(Book.q.bookName == name).count()
         if b:
-            self.write(u'本书已经存在,请勿重复添加')
+            self.reply_json_error(1, u'本书已经存在,请勿重复添加')
             return
         try:
             book = Book(bookName=name, source=source, author=author, uploadUser=upload, price=price, bookDesc=breif)
             if book:
-                self.write(u'书籍添加成功')
+                self.reply_json_data(0, u'书籍添加成功')
                 return
             else:
-                self.write(u'书籍添加失败!')
+                self.reply_json_error(1, u'书籍添加失败!')
                 return
         except Exception as e:
             logging.error(str(e))

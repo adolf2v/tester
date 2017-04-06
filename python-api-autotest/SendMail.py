@@ -64,4 +64,4 @@ if __name__ == "__main__":
     server = {'name': 'smtp.163.com', 'user': 'liuweiqiang3v@163.com', 'passwd': 'xxxxxxx'}
     with open("result.html", "rb") as fb:
         content = fb.read()
-        send_mail(server, 'liuweiqiang3v@163.com', ['liuwq@tupo.com'], u'测试报告,详情请见附件', content, files=["result.html"])
+        send_mail(server, 'liuweiqiang3v@163.com', ['xxxxx@xxxxx.com'], u'测试报告,详情请见附件', content, files=["result.html"])

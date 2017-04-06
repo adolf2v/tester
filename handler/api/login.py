@@ -6,16 +6,17 @@ import hashlib
 import sys
 from datetime import datetime
 from models.login import LoginStatus
-from models.login import LoginStatus
+from libs.helper import handlerHelper
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
 
-class LoginHandler(tornado.web.RequestHandler):
+class LoginHandler(tornado.web.RequestHandler, handlerHelper):
     # 返回登录的html页面
     def get(self):
         self.render('login.html')
+
     # 用户进行登录和退出的post接口
     def post(self):
         action = self.get_argument('action', None)
@@ -24,24 +25,24 @@ class LoginHandler(tornado.web.RequestHandler):
             "logout": self.logout,
         }
         func = action_mapping.get(action, None)
-        logging.error("action is %s"%action)
+        logging.error("action is %s" % action)
         if func:
             func()
             return
         else:
-            self.write(u"参数错误,请重试")
+            self.reply_json_error(1000, u'参数错误')
             return
 
     def logout(self):
         mobile = self.get_secure_cookie('sign')
         if not mobile:
-            self.write(u"用户不存在")
+            self.reply_json_error(1, u'用户不存在')
             self.redirect('/login')
             return
         # 查询用户的登录状态
         ls = LoginStatus.select(LoginStatus.q.mobile == mobile)
         if not ls.count():
-            self.write(u"用户不存在")
+            self.reply_json_error(1, u'用户不存在')
             self.redirect('/login')
             return
         ls.getOne().set(status=0)
@@ -54,13 +55,13 @@ class LoginHandler(tornado.web.RequestHandler):
         mobile = self.get_argument('mobile', None).strip()
         password = self.get_argument('password', None).strip()
         if not mobile or not password:
-            self.write(u"用户名或者密码不能为空")
+            self.reply_json_error(1, u'用户名或者密码不能为空')
             self.redirect('/login')
             return
         try:
             u = User.select(User.q.mobile == mobile)
             if not u.count():
-                self.write(u"该手机号码未注册")
+                self.reply_json_error(1, u"该手机号未注册")
                 return
             user = u.getOne()
             salt = user.salt
@@ -69,16 +70,16 @@ class LoginHandler(tornado.web.RequestHandler):
             m.update(password + salt)
             hashpassword = m.hexdigest()
             if not passwd == hashpassword:
-                self.write(u"手机号或者密码不正确")
+                self.reply_json_error(1, u"手机号或者密码不正确")
                 return
             ls = LoginStatus.select(LoginStatus.q.mobile == mobile)
             logging.error(ls)
             if not ls.count():
                 lls = LoginStatus(mobile=mobile, status=1, ip=self.request.remote_ip)
                 if lls:
-                    self.write(u'登录成功')
+                    self.reply_json_data(0, u'登录成功')
             if ls.getOne().status == 1:
-                self.write(u'用户已经登录')
+                self.reply_json_error(1, u'用户已经登录')
                 self.redirect('/book')
                 return
             else:
