@@ -5,15 +5,14 @@ import hashlib
 import tornado
 import random
 import string
-import logging
 from libs.helper import handlerHelper
-
+from tornado.log import app_log
 
 # 注册的handler类
 class SignUpHandler(tornado.web.RequestHandler, handlerHelper):
     def get(self):
-        # 向日志中添加logging.error
-        logging.error("xxxxxxx")
+        # 向日志中添加info级别的log
+        app_log.info("xxxxxxx")
         self.render('signup.html')
 
     # 注册的接口

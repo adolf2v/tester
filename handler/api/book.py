@@ -4,13 +4,13 @@
     Date:2017/3/20
     Name:book
 """
-import logging
+from tornado.log import app_log
 import sys
 import tornado
 from models.book import Book
 from Utils.wrapper import login
 from libs.helper import handlerHelper
-
+from tornado.log import app_log
 
 class BookHandler(tornado.web.RequestHandler, handlerHelper):
     # 获取书籍
@@ -60,4 +60,4 @@ class BookHandler(tornado.web.RequestHandler, handlerHelper):
                 self.reply_json_error(1, u'书籍添加失败!')
                 return
         except Exception as e:
-            logging.error(str(e))
+            app_log.error(str(e))

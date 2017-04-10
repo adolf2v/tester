@@ -1,7 +1,7 @@
 #!coding:utf-8
 import tornado
 from models.user import User
-import logging
+from tornado.log import app_log
 import hashlib
 import sys
 from datetime import datetime
@@ -25,7 +25,7 @@ class LoginHandler(tornado.web.RequestHandler, handlerHelper):
             "logout": self.logout,
         }
         func = action_mapping.get(action, None)
-        logging.error("action is %s" % action)
+        app_log.error("action is %s" % action)
         if func:
             func()
             return
@@ -73,7 +73,7 @@ class LoginHandler(tornado.web.RequestHandler, handlerHelper):
                 self.reply_json_error(1, u"手机号或者密码不正确")
                 return
             ls = LoginStatus.select(LoginStatus.q.mobile == mobile)
-            logging.error(ls)
+            app_log.error(ls)
             if not ls.count():
                 lls = LoginStatus(mobile=mobile, status=1, ip=self.request.remote_ip)
                 if lls:
@@ -89,4 +89,4 @@ class LoginHandler(tornado.web.RequestHandler, handlerHelper):
             self.redirect('/book')
             return
         except Exception as e:
-            logging.error(str(e))
+            app_log.error(str(e))
